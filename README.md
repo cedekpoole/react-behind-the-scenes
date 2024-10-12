@@ -1,10 +1,11 @@
 # How React Works Behind the Scenes
 
-I am currently following Jonas Schmedtmann's course on React.js and have decided to create detailed notes that I can refer back to. These notes will be stored in this repository. I will also create diagrams, when needed, in figma as means to explain particular sections.
+I am currently following **Jonas Schmedtmann's** course on React.js and have decided to create detailed notes that I can refer back to. These notes will be stored in this repository. I will also create diagrams, when needed, in figma as means to explain particular sections.
 
 ## Table of Contents
 
-- [Components, Instances and Elements](#components-instances-and-elements)
+- [**Section 1:** Components, Instances and Elements](#components-instances-and-elements)
+  - [Section 1 Summary](#section-1-summary)
 
 ## Components, Instances and Elements
 
@@ -55,3 +56,7 @@ I am currently following Jonas Schmedtmann's course on React.js and have decided
 
 - A React element is converted into actual DOM elements (HTML) - the actual visual representation of the component instance in the browser
 - React elements are not rendered to the DOM, they live inside the app
+
+### Section 1 Summary
+
+![Section 1 Summary](./images/section-1.png)
