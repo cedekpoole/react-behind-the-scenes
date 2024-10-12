@@ -23,17 +23,17 @@ I am currently following Jonas Schmedtmann's course on React.js and have decided
 
 ### Instances
 
-    ```JSX
-        function App() {
-            return (
-                <div className="tabs">
-                    <Tab item={content[0]}/>
-                    <Tab item={content[1]}/>
-                    <Tab item={content[2]}/>
-                </div>
-            )
-        }
-    ```
+```JSX
+    function App() {
+        return (
+            <div className="tabs">
+                <Tab item={content[0]}/>
+                <Tab item={content[1]}/>
+                <Tab item={content[2]}/>
+            </div>
+        )
+    }
+```
 
 - Instances are created when we 'use' a component - we can use the same component multiple times
 - React internally calls Tab()
