@@ -4,11 +4,11 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 
 ## Table of Contents
 
-- [**Section 1:** React, Props and State](#what-is-react)
+- [**Section 1:** React, Props and State](#section-1-what-is-react)
 - [**Section 2:** Components, Instances and Elements](#components-instances-and-elements)
   - [Summary](#section-1-summary)
 
-## What is React?
+## Section 1: What is React?
 
 - Declarative (we tell React what we want and it figures out how to do it)
 - React is a library, not a framework
@@ -31,7 +31,7 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 - When state changes, React re-renders the component
 - This allows devs to update the UI in response to events and persist local variables between renders
 
-## Components, Instances and Elements
+## Section 2: Components, Instances and Elements
 
 ### Components
 
@@ -81,9 +81,9 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 - A React element is converted into actual DOM elements (HTML) - the actual visual representation of the component instance in the browser
 - React elements are not rendered to the DOM, they live inside the app
 
-### Section 1 Summary
+### Section 2 Summary
 
-![Section 1 Summary](./images/01.png)
+![Section 2 Summary](./images/01.png)
 Figure 1: Components, Instances, Elements and DOM Elements
 
 - Components are the blueprints
