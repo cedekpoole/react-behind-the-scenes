@@ -2,6 +2,10 @@
 
 I am currently following Jonas Schmedtmann's course on React.js and have decided to create detailed notes that I can refer back to. These notes will be stored in this repository. I will also create diagrams, when needed, in figma as means to explain particular sections.
 
+## Table of Contents
+
+- [Components, Instances and Elements](#components-instances-and-elements)
+
 ## Components, Instances and Elements
 
 ### Components
@@ -41,7 +45,7 @@ I am currently following Jonas Schmedtmann's course on React.js and have decided
 - Has own state and props; has its own lifecycle
 - We sometimes use components and component instances interchangeably (e.g. a UI is made up of components when in fact they are made of component instances) but they are different
 
-### react Elements
+### React Elements
 
 - As react executes the code in each of these instances, they will each return one or more react elements.
 - JSX is converted to React.createElement() function calls and a React element is the result
