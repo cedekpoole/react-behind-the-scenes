@@ -4,8 +4,32 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 
 ## Table of Contents
 
-- [**Section 1:** Components, Instances and Elements](#components-instances-and-elements)
-  - [Section 1 Summary](#section-1-summary)
+- [**Section 1:** React, Props and State](#what-is-react)
+- [**Section 2:** Components, Instances and Elements](#components-instances-and-elements)
+  - [Summary](#section-1-summary)
+
+## What is React?
+
+- Declarative (we tell React what we want and it figures out how to do it)
+- React is a library, not a framework
+- Create reusable components (the building blocks of React apps)
+- React is all about building UIs (User Interfaces)
+- One-way data flow (downwards) called unidirectional data flow (from parent to child)
+- Uses a virtual DOM (a JavaScript representation of the actual DOM)
+- Is very popular and has a huge community
+
+### What are props?
+
+- They are data passed down from a parent component to a child component
+- Props are read-only (immutable)
+- A tool to configure and customise components, making them dynamic and reusable
+
+### What is state?
+
+- State is data that is local or private to a component
+- State is mutable (can be changed)
+- When state changes, React re-renders the component
+- This allows devs to update the UI in response to events and persist local variables between renders
 
 ## Components, Instances and Elements
 
