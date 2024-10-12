@@ -60,6 +60,7 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 ### Section 1 Summary
 
 ![Section 1 Summary](./images/01.png)
+Figure 1: Components, Instances, Elements and DOM Elements
 
 - Components are the blueprints
 - Instances are the physical manifestations of the components that each have their own state and props
