@@ -59,4 +59,9 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 
 ### Section 1 Summary
 
-![Section 1 Summary](./images/section-1.png)
+![Section 1 Summary](./images/01.png)
+
+- Components are the blueprints
+- Instances are the physical manifestations of the components that each have their own state and props
+- As React calls each component instance, each JSX will create a react.createElement() function call which will create a react element for each component instance; elements are the objects that React uses to create and update the DOM
+- DOM elements are the actual HTML elements that are rendered to the browser
