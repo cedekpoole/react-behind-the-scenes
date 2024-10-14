@@ -9,6 +9,10 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
   - [Summary](#section-2-summary)
 - [**Section 3:** How Rendering Works](#section-3-how-rendering-works)
   - [Overview](#overview)
+  - [Render Phase Steps](#render-phase-steps)
+  - [The Reconciler and Fiber Architecture](#the-reconciler-and-fiber-architecture)
+    - [What is Fiber?](#what-is-fiber)
+    - [How Does Fiber Work?](#how-does-fiber-work)
 
 ---
 
