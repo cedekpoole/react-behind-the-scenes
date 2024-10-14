@@ -7,6 +7,8 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
 - [**Section 1:** React, Props, and State](#section-1-what-is-react)
 - [**Section 2:** Components, Instances, and Elements](#section-2-components-instances-and-elements)
   - [Summary](#section-2-summary)
+- [**Section 3:** How Rendering Works](#section-3-how-rendering-works)
+  - [Overview](#overview)
 
 ---
 
@@ -104,3 +106,15 @@ _Figure 1: Components, Instances, Elements and DOM Elements_
 - **Instances**: Physical manifestations of components with their own state and props.
 - **React Elements**: Created when JSX is converted into React.createElement() calls. These elements are used to build the virtual DOM.
 - **DOM elements**: The actual HTML elements rendered in the browser.
+
+## Section 3: How Rendering Works
+
+How are components displayed on the screen? How does React know when to update the UI?
+In React, rendering is NOT updating the DOM, it only updates the virtual DOM. React then compares the virtual DOM with the actual DOM to determine what has changed and updates only the changed parts.
+
+### Overview
+
+- **Initial Render**: React renders the UI for the first time.
+- **Re-render**: React updates the UI when the state or props of a component change.
+- **Virtual DOM**: React uses a virtual DOM to optimize rendering.
+- **Diffing Algorithm**: React compares the virtual DOM with the actual DOM to determine what has changed.
