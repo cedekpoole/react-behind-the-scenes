@@ -114,7 +114,16 @@ In React, rendering is NOT updating the DOM, it only updates the virtual DOM. Re
 
 ### Overview
 
-- **Initial Render**: React renders the UI for the first time.
-- **Re-render**: React updates the UI when the state or props of a component change.
-- **Virtual DOM**: React uses a virtual DOM to optimize rendering.
-- **Diffing Algorithm**: React compares the virtual DOM with the actual DOM to determine what has changed.
+In practice, it might look like React only re-renders the component that has changed. However, React re-renders the entire app and then compares the virtual DOM with the actual DOM to determine what has changed. Renders are batched together and are not immediate because React is optimized to minimize the number of updates to the actual DOM.
+
+![How Components are Displayed on Screen](./images/render.png)
+
+_Figure 2: How Components are Displayed on Screen_
+
+In practice, React follows these steps:
+
+1. **Initial Render**: React renders the UI for the first time.
+2. **Re-render**: React updates the UI when the state or props of a component change.
+3. **Virtual DOM**: React creates a virtual DOM to optimize rendering.
+4. **Diffing Algorithm**: React compares the virtual DOM with the actual DOM to determine what has changed.
+5. **Reconciliation**: React updates only the changed parts of the actual DOM.
