@@ -110,11 +110,10 @@ _Figure 1: Components, Instances, Elements and DOM Elements_
 ## Section 3: How Rendering Works
 
 How are components displayed on the screen? How does React know when to update the UI?
-In React, rendering is NOT updating the DOM, it only updates the virtual DOM. React then compares the virtual DOM with the actual DOM to determine what has changed and updates only the changed parts.
 
 ### Overview
 
-In practice, it might look like React only re-renders the component that has changed. However, React re-renders the entire app and then compares the virtual DOM with the actual DOM to determine what has changed. Renders are batched together and are not immediate because React is optimized to minimize the number of updates to the actual DOM.
+In practice, it might look like React only re-renders the component that has changed. However, React re-renders the entire app and then compares the virtual DOM with the actual DOM to determine what has changed and updates only the changed parts. In React, rendering is NOT updating the DOM, it only updates the virtual DOM. Renders are batched together and are not immediate because React is optimized to minimize the number of updates to the actual DOM.
 
 ![How Components are Displayed on Screen](./images/render.png)
 
@@ -128,11 +127,71 @@ In practice, React follows these steps:
 4. **Diffing Algorithm**: React compares the virtual DOM with the actual DOM to determine what has changed.
 5. **Reconciliation**: React updates only the changed parts of the actual DOM.
 
-### The Render Phase
+## The Render Phase
 
-When a component is rendered, React goes through the following steps:
+The render phase is the first phase of React's rendering process. When a component is rendered, React goes through a series of steps to ensure that the UI reflects the current state of the application.
 
-1. **Render Function**: React calls the component function to create a React element. React elements are objects that describe what the UI should look like.
-2. **Update Virtual DOM**: React updates the virtual DOM with the new element. The Virtual DOM is a JavaScript representation of the actual DOM; it is a tree of all React elements created from all instances of the component tree.
+### Steps in the Render Phase:
 
-Rendering a component will re-render all its children, even if they have not changed. React does this to ensure that the entire component tree is up-to-date.
+1. **Render Function**:
+   - React calls the component function, which returns a React element.
+   - React elements are plain JavaScript objects that describe what the UI should look like.
+2. **Update Virtual DOM**:
+   - React updates the Virtual DOM with the new elements.
+   - The Virtual DOM is a lightweight, JavaScript representation of the actual DOM.
+   - It consists of a tree of all React elements created from the component tree. This tree allows React to efficiently update only parts of the actual DOM that need to be changed.
+
+> **Note:** Rendering a component will re-render all its children, even if they haven't changed. React ensures that the entire component tree stays up-to-date.
+
+![The Render Phase](./images/03.png)  
+_Figure 3: The Render Phase_
+
+---
+
+### The Reconciler: Fiber
+
+React's reconciliation process is powered by the **Fiber architecture**, which improves efficiency and allows React to handle rendering in smaller chunks.
+
+#### Key Concepts of Fiber:
+
+- **Fiber Tree Creation**:
+
+  - On the initial render, React constructs a **Fiber tree**. This tree is a lightweight representation of the React element tree (or virtual DOM).
+  - Each component instance and DOM element gets a corresponding **fiber node**.
+
+- **Persistent Structure**:
+  - Fibers are **NOT** re-created on every render. Instead, the Fiber tree is persistent and mutable.
+  - During the reconciliation process, React mutates the existing fibers rather than creating new ones. This helps React track the component's state, props, and side effects efficiently.
+
+#### What Fibers Track:
+
+- Fibers keep track of important information for each component instance, including:
+
+  - Current **state** and **props**.
+  - **Side effects** (e.g., updating DOM nodes, refs, or running certain hooks).
+  - Pending **work** (e.g., state updates, DOM changes, etc.).
+
+- Each fiber also maintains a **work queue**, containing tasks such as:
+  - Updating state.
+  - Performing DOM updates.
+  - Running side effects (e.g., `useEffect`).
+  - Processing refs.
+
+Because of this, fibers are also referred to as **units of work**.
+
+#### Fiber Tree Structure:
+
+- Unlike the React element tree, which is structured as a typical parent-child hierarchy, the Fiber tree is structured as a **linked list**, with nodes arranged in sibling relationships.
+- The Fiber tree is a complete representation of the DOM structure, enabling React to manage work more efficiently.
+
+#### Asynchronous Work:
+
+- One of the key advantages of Fiber is its ability to manage rendering asynchronously. This allows React to:
+  - **Pause**, **abort**, or **resume** rendering work at any time.
+  - Break long renders into smaller, manageable chunks without blocking the main JavaScript thread.
+
+By working in small chunks, React prevents long renders from freezing the UI, allowing for a more responsive user experience.
+
+---
+
+By understanding how the render phase and Fiber architecture work, you can better grasp how React efficiently manages updates and ensures that the UI reflects the current state of the application without unnecessary re-renders or performance issues.
