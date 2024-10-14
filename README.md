@@ -127,3 +127,12 @@ In practice, React follows these steps:
 3. **Virtual DOM**: React creates a virtual DOM to optimize rendering.
 4. **Diffing Algorithm**: React compares the virtual DOM with the actual DOM to determine what has changed.
 5. **Reconciliation**: React updates only the changed parts of the actual DOM.
+
+### The Render Phase
+
+When a component is rendered, React goes through the following steps:
+
+1. **Render Function**: React calls the component function to create a React element. React elements are objects that describe what the UI should look like.
+2. **Update Virtual DOM**: React updates the virtual DOM with the new element. The Virtual DOM is a JavaScript representation of the actual DOM; it is a tree of all React elements created from all instances of the component tree.
+
+Rendering a component will re-render all its children, even if they have not changed. React does this to ensure that the entire component tree is up-to-date.
