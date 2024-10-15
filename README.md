@@ -14,6 +14,16 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
   - [Diffing Algorithm](#diffing-algorithm)
   - [The Commit Phase](#the-commit-phase)
   - [Summary of Section 3](#summary-of-section-3)
+- [**Section 4:** Rules for Render Logic](#section-4-rules-for-render-logic)
+  - [What is Render Logic?](#what-is-render-logic)
+  - [Pure Functions and React Components](#pure-functions-and-react-components)
+  - [Event Handlers](#event-handlers)
+    - [The Difference: Render Logic vs. Event Handlers](#the-difference-render-logic-vs-event-handlers)
+  - [Side Effects and Render Logic](#side-effects-and-render-logic)
+  - [Pure Components in React](#pure-components-in-react)
+    - [Event Handlers and Side Effects](#event-handlers-and-side-effects)
+  - [Managing Side Effects: useEffect Hook](#managing-side-effects-useeffect-hook)
+  - [Key Takeaways](#key-takeaways)
 
 ---
 
@@ -377,3 +387,167 @@ Here’s how React handles this efficiently:
 3. **Fiber Prioritization**: Since typing in the search bar is a higher-priority action (it affects what the user sees immediately), React uses Fiber to prioritize updating the user list, while pausing the "load more" updates in the background. Once the user list is updated, React can resume work on loading more users.
 
 4. **Commit Phase**: After reconciliation and diffing, React enters the commit phase and applies the necessary changes to the real DOM—updating only the relevant user cards and leaving the rest of the DOM untouched.
+
+## Section 4: Rules for Render Logic
+
+### What is Render Logic?
+
+Render logic refers to all the code in a React component that determines how the UI should look. This is the code that runs when a component renders, meaning it determines the JSX (JavaScript XML) that React converts into actual DOM elements visible on the screen.
+
+Example of Render Logic:
+
+```jsx
+function MyComponent(props) {
+  const title = "Hello World!";
+
+  return (
+    <div>
+      <h1>{title}</h1>
+    </div>
+  );
+}
+```
+
+- The const title = "Hello World!"; is part of the render logic because it defines data that the component will display.
+- The return statement containing JSX is also part of render logic. This is where you tell React how the component should look.
+
+### Pure Functions and React Components
+
+In functional programming (which React heavily relies on), pure functions are those that:
+
+- Always return the same output for the same input.
+- Do not cause side effects, meaning they don't alter external variables, make HTTP requests, manipulate the DOM directly, or set timers.
+
+In React, the render logic must behave like a pure function. If given the same props, a component must render the same result (output) consistently. This helps React optimize rendering and makes your components predictable.
+
+Example of Pure Function:
+
+```jsx
+function calculateArea(radius) {
+  return Math.PI * radius * radius;
+}
+```
+
+This function will always return the same output if you give it the same radius. It does not depend on external factors and has no side effects.
+
+React expects component render logic to behave similarly.
+
+### Event Handlers
+
+Event handler functions are pieces of logic that respond to user actions. These functions are usually passed to elements to react to events like clicks, form submissions, etc.
+
+Event handlers are different from render logic because they do not participate in rendering the UI but trigger actions when the user interacts with the component.
+
+Example:
+
+```jsx
+function MyComponent() {
+  const handleClick = () => {
+    alert("Button clicked!");
+  };
+
+  return <button onClick={handleClick}>Click me</button>;
+}
+```
+
+Here, the handleClick function is an event handler. It doesn’t affect how the component is displayed. Instead, it executes when the user clicks the button.
+
+#### The Difference: Render Logic vs. Event Handlers
+
+- **Render logic** is responsible for describing the UI of the component.
+- **Event handlers** are responsible for changing the state of the application or interacting with the outside world after user input.
+
+### Side Effects and Render Logic
+
+Side effects are actions that a function takes that affect the outside world, such as:
+
+- Mutating a global variable.
+- Making an HTTP request.
+- Changing the DOM directly.
+
+React enforces that render logic should not cause side effects. For example, you cannot directly fetch data or modify props within the render logic because that would make the component impure and unpredictable.
+
+**Forbidden Side Effects in Render Logic:**
+
+- Making HTTP requests
+- Modifying DOM elements directly (e.g., document.querySelector)
+- Setting timers (e.g., setTimeout)
+- Mutating props
+
+If you perform a side effect during render, React might behave unexpectedly or even crash, such as causing an infinite render loop.
+
+### Pure Components in React
+
+React components should behave like pure functions. If the same props are passed in, the same JSX should always be returned. This allows React to optimize rendering performance through techniques like memoization or re-render batching.
+
+For example, updating state inside the render logic is a common mistake that can lead to infinite loops because changing the state triggers a re-render, which would again try to change the state.
+
+```jsx
+function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  // ⚠️ This will cause an infinite loop
+  setCount(count + 1);
+
+  return <div>{count}</div>;
+}
+```
+
+#### Event Handlers and Side Effects
+
+Event handlers, on the other hand, are allowed to perform side effects because they are triggered in response to user actions. They can update state, make HTTP requests, or even manipulate the DOM (though it's better to let React handle that).
+
+Example of Event Handler with Side Effects:
+
+```jsx
+function MyComponent() {
+  const [data, setData] = useState(null);
+
+  const handleClick = async () => {
+    const response = await fetch("https://api.example.com/data");
+    const result = await response.json();
+    setData(result);
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Fetch Data</button>
+      {data && <div>{data.title}</div>}
+    </div>
+  );
+}
+```
+
+In this case, handleClick performs a side effect (fetching data from an API), but it is safe because it's an event handler and not part of the render logic.
+
+### Managing Side Effects: useEffect Hook
+
+When you need to perform side effects at specific times (such as after a component first renders or when certain data changes), you can use the useEffect hook. This hook allows you to manage side effects outside of the render logic, keeping the component pure.
+
+Example with useEffect:
+
+```jsx
+function MyComponent() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("https://api.example.com/data");
+      const result = await response.json();
+      setData(result);
+    };
+    fetchData();
+  }, []); // Empty array means this runs only once after initial render.
+
+  return <div>{data ? data.title : "Loading..."}</div>;
+}
+```
+
+The useEffect hook is used here to fetch data after the component renders for the first time, without causing side effects during the render phase itself.
+
+### Key Takeaways
+
+- Render logic in React components must be pure and should not cause side effects.
+- Event handlers handle user interactions and are allowed to perform side effects.
+- Use useEffect for side effects that need to occur when a component renders or updates.
+- Always separate render logic from code that changes application state or interacts with the outside world to avoid issues like infinite loops and unpredictable behavior.
