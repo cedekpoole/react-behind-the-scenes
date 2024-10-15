@@ -183,11 +183,12 @@ Fiber is a key part of React's architecture designed to improve performance by b
   - Pause work.
   - Resume work.
   - Abort unnecessary work.
-  - This prevents the main JavaScript thread from being blocked, ensuring that the app - remains responsive.
+  - This prevents the main JavaScript thread from being blocked, ensuring that the app remains responsive.
 
 #### How Does Fiber Work?
 
 **Fiber Tree Creation**
+
 On the initial render, React creates a Fiber tree. This Fiber tree represents the entire component tree, but in a more efficient, linked-list format.
 
 - Each component instance (like Greeting()) and each DOM element has a corresponding fiber node.
@@ -196,18 +197,18 @@ On the initial render, React creates a Fiber tree. This Fiber tree represents th
   - Props (i.e., data passed down from parent components).
   - Side effects (i.e., updates that need to happen, like DOM changes or useEffect logic).
 
-**Persistent and Mutable Structure**
+**Persistent and Mutable Structure**:
 One of the key features of Fiber is that the Fiber tree is persistent. This means that it’s not re-created every time a component re-renders.
 
 - Instead, the tree is mutated when a component changes. React doesn’t need to create new fibers from scratch—it can update only what needs to change.
 
-**Fiber: Unit of Work**
+**Fiber: Unit of Work**:
 A fiber is also known as a unit of work. Each fiber (each node in the Fiber tree) represents a chunk of work that React needs to do, such as updating state or making DOM updates. Because the Fiber architecture breaks down rendering into these chunks, React can work on them in small parts, pausing or aborting when needed.
 
-**Linked List and Sibling Relationships**
+**Linked List and Sibling Relationships**:
 Unlike the typical parent-child structure of the React element tree, the Fiber tree is structured as a linked list, where fibers are arranged in sibling relationships. This structure allows React to traverse the tree more efficiently and manage work in smaller portions.
 
-**Asynchronous Rendering**
+**Asynchronous Rendering**:
 The Fiber architecture enables React to handle rendering asynchronously, meaning it doesn’t have to complete everything in one go.
 
 - Asynchronous work means React can pause and resume rendering whenever needed.
