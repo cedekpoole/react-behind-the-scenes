@@ -368,3 +368,7 @@ Here’s how React handles this efficiently:
 3. **Fiber Prioritization**: Since typing in the search bar is a higher-priority action (it affects what the user sees immediately), React uses Fiber to prioritize updating the user list, while pausing the "load more" updates in the background. Once the user list is updated, React can resume work on loading more users.
 
 4. **Commit Phase**: After reconciliation and diffing, React enters the commit phase and applies the necessary changes to the real DOM—updating only the relevant user cards and leaving the rest of the DOM untouched.
+
+![React Rendering Process](./images/04.png)
+
+_Figure 4: Recap - The React Rendering Process_
