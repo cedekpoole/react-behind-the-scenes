@@ -11,8 +11,9 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
   - [Overview](#overview)
   - [Render Phase Steps](#render-phase-steps)
   - [The Reconciler and Fiber Architecture](#the-reconciler-and-fiber-architecture)
-    - [What is Fiber?](#what-is-fiber)
-    - [How Does Fiber Work?](#how-does-fiber-work)
+  - [Diffing Algorithm](#diffing-algorithm)
+  - [The Commit Phase](#the-commit-phase)
+  - [Summary of Section 3](#summary-of-section-3)
 
 ---
 
@@ -169,7 +170,7 @@ Now that we understand components, React elements, and the Virtual DOM, here’s
 > **Note**: When React renders a component, it also renders all of its child components to ensure the entire tree is up to date. This happens even if some child components haven't changed.
 
 ![The Render Phase](./images/03.png)  
-_Figure 3: The Render Phase_
+_Figure 2: The Render Phase_
 
 ### The Reconciler and Fiber Architecture
 
@@ -249,6 +250,10 @@ When you interact with a React application (like clicking a button), React needs
 
 - **Render Phase**: React calculates what needs to be changed by comparing the new state of the app to the old one.
 - **Commit Phase**: React applies those changes to the real DOM and makes them visible to the user.
+
+![React Rendering Phases](./images/render.png)
+
+_Figure 3: The Render Phase and the Commit Phase_
 
 Now, let’s dive into the commit phase.
 
