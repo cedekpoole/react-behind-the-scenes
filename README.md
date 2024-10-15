@@ -214,3 +214,157 @@ The Fiber architecture enables React to handle rendering asynchronously, meaning
 - Asynchronous work means React can pause and resume rendering whenever needed.
 - If React is rendering a large component tree, it can break that work into smaller tasks, preventing long renders from blocking the main JavaScript thread (which is responsible for user interactions, animations, etc.).
   This ensures the app stays responsive, even during complex or long renders.
+
+### Diffing Algorithm
+
+When React updates the Virtual DOM, it uses a diffing algorithm to compare the old Virtual DOM with the new one. This algorithm helps React determine what has changed and what needs to be updated in the real DOM.
+
+Now, let’s use a fun analogy to explain diffing. Imagine you’re playing a “spot the difference” game where you have two seemingly identical images, but there are small differences between them.
+
+- **Old Virtual DOM**: This is the first image.
+- **New Virtual DOM**: This is the second image after changes in the app (like a state update).
+
+React needs to figure out the differences between these two images (Virtual DOMs). The process of finding the differences is called diffing. But React doesn’t just compare pixel-by-pixel. It uses some smart strategies to speed up the process:
+
+1. **Same Type of Element**: React assumes that if two elements are the same type (like two `<div>` elements), it doesn’t need to look too deeply inside them unless their attributes or children have changed.
+
+   Example:
+
+   - You have a `<div>` containing text. After a state update, the text inside the `<div>` changes.
+   - React will only compare the content of the `<div>`, not the entire structure of the element.
+
+2. **Keys for Lists**: Imagine you’re comparing two lists of items. React uses keys to identify which items are new, which have been removed, and which have been moved around.
+
+   Example:
+
+   - Let’s say you have a list of three items: `["Apple", "Banana", "Cherry"]`.
+     You change the list to `["Banana", "Apple", "Cherry"]`.
+   - By using keys (unique identifiers for each item), React can see that only the order of the first two items has changed, so it only updates those items, not the entire list.
+
+### The Commit Phase
+
+**React’s Rendering Phases: The Big Picture**
+
+When you interact with a React application (like clicking a button), React needs to recalculate and update the UI to reflect any changes. This is done through two main phases:
+
+- **Render Phase**: React calculates what needs to be changed by comparing the new state of the app to the old one.
+- **Commit Phase**: React applies those changes to the real DOM and makes them visible to the user.
+
+Now, let’s dive into the commit phase.
+
+The commit phase is the second phase of React’s update process. Once React has figured out what needs to be changed during the render phase, it moves on to actually updating the DOM in the commit phase.
+
+#### What Happens in the Commit Phase?
+
+1. **Inserting, Deleting, and Updating DOM Elements:**
+
+   - React takes the list of changes (calculated during the render phase) and applies them to the real DOM. It might:
+     - Insert new elements (like adding a new list item),
+     - Delete elements (removing an old item),
+     - Update existing elements (changing a button’s text).
+   - These DOM changes are synchronous, meaning they happen all at once without interruption. This ensures that the browser always has a fully consistent UI to display.
+
+2. **Flushing Updates:**
+
+   - React processes the effects list (side effects) created during the render phase, flushing (applying) those changes to the actual DOM.
+   - Side effects could include anything from updating state, setting refs, to triggering useEffect hooks.
+   - The effects list keeps track of all the changes React needs to apply (see figure 2)
+
+#### Why Must the Commit Phase Be Synchronous?
+
+- The commit phase is synchronous, meaning that React updates the entire DOM in one go. This is necessary because:
+  - If React paused halfway through updating the DOM, the user might see a partial update (a broken UI where only some changes are visible).
+  - By updating everything in one step, React ensures the user interface is always in a consistent, correct state.
+
+#### Render Phase vs. Commit Phase
+
+- **Render Phase**:
+
+  - Can be paused, resumed, and even discarded. This is why it can handle complex operations without blocking the main thread, keeping the app responsive.
+  - React builds a list of updates (the work it needs to do) but doesn’t yet apply them to the DOM.
+  - The Fiber tree (React’s internal data structure) is updated, but no visible changes happen yet (it creates a work-in-progress tree).
+
+- **Commit Phase**:
+  - Cannot be interrupted. Once React starts updating the DOM, it finishes in one go.
+  - This is when the calculated updates (from the render phase) are flushed to the DOM.
+  - After the commit phase, the user can see the new, updated UI.
+
+#### Fiber and the Commit Phase
+
+**The Fiber Tree**
+
+- In React, each element/component has a corresponding fiber (an object that holds information about the component’s state, props, and DOM updates).
+- React builds and updates a Fiber tree during the render phase, where each fiber corresponds to a React element or DOM element.
+- Once React completes the commit phase, the work-in-progress Fiber tree becomes the current Fiber tree. This means React doesn’t throw away the Fiber tree after each update but keeps reusing it, which saves time.
+
+#### What Happens After the Commit Phase?
+
+1. **Browser Paint:**
+   - After React updates the DOM in the commit phase, the browser notices the DOM changes.
+   - The browser schedules a paint operation, where it re-renders the user interface on the screen. This happens asynchronously, whenever the browser has idle time.
+2. **Effect Hooks (useEffect)**:
+
+   - Once the DOM is updated, React runs any side effects like useEffect hooks. These side effects can involve tasks like fetching data from APIs, adding event listeners, etc.
+   - For example:
+
+   ```javascript
+   useEffect(() => {
+     console.log("This runs after the commit phase");
+   }, []);
+   ```
+
+#### React vs. React DOM: Who Does What?
+
+React has two main pieces:
+
+1.  **React (the Library)**:
+
+    - React is the core library that handles the render phase. It figures out what changes need to be made and builds the Virtual DOM (or Fiber tree), but React itself doesn’t actually touch the real DOM.
+
+2.  **React DOM (the Renderer)**:
+
+    - React DOM is the part responsible for the commit phase. It takes the changes calculated by React and applies them to the DOM. This is why you need both `React` and `ReactDOM `in your `index.js` file:
+
+      ```javascript
+      import React from "react";
+      import ReactDOM from "react-dom";
+      ```
+
+    - React DOM takes care of the commit phase, making sure the browser sees the correct UI. It is technically a renderer that deals specifically with the DOM.
+
+#### React and Different Hosts
+
+React was designed to be platform-independent, meaning it can work with many different environments (called hosts). The commit phase could be directed toward different output targets, depending on the platform. React can be used to create:
+
+- **Web apps**: Using React DOM, which updates the real DOM in web browsers.
+- **Native mobile app**s: Using React Native, which applies updates to native mobile components.
+- **Other platforms**: You can even create documents (PDFs, Figma designs, etc.) using other renderers.
+
+Each of these hosts (like React DOM or React Native) is responsible for applying the changes in the commit phase. The concept of a Virtual DOM really only makes sense in the context of web apps because on other platforms (like mobile), React is managing updates to a different kind of element.
+
+#### Why Does React Split the Render and Commit Phases?
+
+React divides its work into two phases (render and commit) to improve efficiency and performance:
+
+- Render Phase: Can be paused and resumed, allowing React to handle heavy computations or complex updates without freezing the app. It allows concurrent rendering.
+- Commit Phase: Must happen synchronously to ensure the UI remains consistent and is updated in one go. It flushes all the changes to the real DOM.
+
+This split allows React to make the app responsive even when handling lots of updates.
+
+### Summary of Section 3
+
+Let’s bring it all together with a more complex example:
+
+- Imagine you have a React app with a list of users displayed as cards, a search bar, and a "load more" button at the bottom.
+- You type into the search bar, which triggers a state update that filters the list of users.
+- Meanwhile, you also click the "load more" button to add more users to the list.
+
+Here’s how React handles this efficiently:
+
+1. **Virtual DOM Updates**: When you type into the search bar, React updates the Virtual DOM to reflect the new, filtered list of users.
+
+2. **Diffing**: React compares the old Virtual DOM (with all users) to the new Virtual DOM (with filtered users). Since only some users need to be removed from the list, React figures out the minimal changes required and only updates the affected user cards in the real DOM.
+
+3. **Fiber Prioritization**: Since typing in the search bar is a higher-priority action (it affects what the user sees immediately), React uses Fiber to prioritize updating the user list, while pausing the "load more" updates in the background. Once the user list is updated, React can resume work on loading more users.
+
+4. **Commit Phase**: After reconciliation and diffing, React enters the commit phase and applies the necessary changes to the real DOM—updating only the relevant user cards and leaving the rest of the DOM untouched.
