@@ -551,3 +551,142 @@ The useEffect hook is used here to fetch data after the component renders for th
 - Event handlers handle user interactions and are allowed to perform side effects.
 - Use useEffect for side effects that need to occur when a component renders or updates.
 - Always separate render logic from code that changes application state or interacts with the outside world to avoid issues like infinite loops and unpredictable behavior.
+
+## Section 5: React Hooks
+
+### What are Hooks?
+
+React hooks are special functions provided by React that allow us to "hook into" React's core functionalities, like managing state, side effects, and context, without writing class components. Essentially, hooks expose internal React mechanisms, giving developers access to powerful features that were previously only available in class-based components.
+
+Hooks enable function components to:
+
+- Manage their own state (`useState`)
+- Perform side effects such as data fetching or logging (`useEffect`)
+- Access context (`useContext`)
+- And much more, like memoization and referencing DOM elements.
+
+React keeps track of the component structure via the Fiber Tree, which is an internal data structure built from the **Virtual DOM**. Each element in the Fiber Tree is a fiber, which stores a linked list of the hooks used in a component.
+
+For example, hooks like `useState` and `useEffect` are added to this linked list in the order they are called. This order must always be maintained, or React will lose track of the state associated with each hook.
+
+### Basic Hooks
+
+1. `useState`: Manages state in function components.
+
+Every component in React can have its own state, allowing it to manage dynamic data (e.g., a counter value).
+
+Example:
+
+```jsx
+const [count, setCount] = useState(0); // 'count' is the state, 'setCount' is the function to update it
+```
+
+- Every time `setCount` is called, the component re-renders, and the new value of count is displayed.
+
+2. `useEffect`: Handles side effects in function components.
+
+React updates the UI in response to state changes, but certain tasks—like fetching data, or interacting with external APIs—should happen outside this pure rendering process. useEffect allows us to perform such tasks after the component renders.
+
+Example:
+
+```jsx
+useEffect(() => {
+  console.log("Component mounted or updated");
+}, [count]); // Runs whenever 'count' changes
+```
+
+- `useEffect` runs after the first render and whenever the count variable changes.
+
+#### Rules of Hooks
+
+There are two crucial rules to remember when working with hooks:
+
+1. **Call hooks only at the top level of your component:**
+
+- Hooks should not be called inside loops, conditionals, or nested functions. This is because React relies on the order in which hooks are called to keep track of the associated state. If the order changes between renders, React will get confused about which piece of state belongs to which hook.
+
+2. **Call hooks only inside React functions:**
+
+- Hooks must only be used inside React functional components or custom hooks, not in regular JavaScript functions.
+
+#### Why Call Hooks in the Same Order? (Order Matters)
+
+Hooks are registered in a linked list in the Fiber Tree. This linked list is built during the component's first render, and React uses the order of this list to keep track of hook state between renders.
+
+For example:
+
+- First, `useState()` is called, storing the initial state.
+- Then, `useEffect()` is called, which registers a side effect.
+
+If a hook is conditionally rendered (e.g., within an if statement), the order of the list breaks, causing React to lose track of which hook manages which state or effect. This can lead to errors or unexpected behavior. Therefore, hooks must always be called in the same order.
+
+### Custom Hooks
+
+React allows developers to create custom hooks, which start with the prefix use. Custom hooks allow for reusing logic between components that isn't tied to UI behavior. They can encapsulate complex logic, making it easier to share and reuse across different components.
+
+For example, if two components need to fetch data, you can create a custom hook:
+
+```jsx
+function useFetchData(url) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((result) => setData(result));
+  }, [url]);
+
+  return data;
+}
+
+// Usage:
+const data = useFetchData("https://api.example.com");
+```
+
+This custom hook encapsulates the logic for fetching data, which can be reused across different components.
+
+### More Advanced Hooks
+
+- `useReducer`: A more complex version of `useState`, often used for managing state in large components or when the state logic is complex. It’s similar to Redux in that it uses a reducer function.
+
+Example:
+
+```jsx
+const [state, dispatch] = useReducer(reducer, initialState);
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
+    default:
+      return state;
+  }
+}
+```
+
+- `useContext`: Allows a component to access global context without passing props through multiple levels.
+
+Example:
+
+```jsx
+const ThemeContext = React.createContext("light");
+const theme = useContext(ThemeContext); // Access the current value of ThemeContext
+```
+
+- `useRef`: Allows you to reference DOM elements or store a mutable value that does not trigger a re-render when updated.
+
+Example:
+
+```jsx
+const inputRef = useRef(null);
+useEffect(() => {
+  inputRef.current.focus(); // Focuses the input element on mount
+}, []);
+```
+
+### Key Takeaways
+
+- React hooks allow you to use state and other React features in function components.
+- They simplify React's API by eliminating the need for class components.
+- Hooks must follow the rules (called at the top level, in the same order).
+- Start with `useState` and `useEffect` to manage local state and side effects.
+- Custom hooks provide a way to reuse logic across components
