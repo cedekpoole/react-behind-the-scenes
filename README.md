@@ -24,6 +24,14 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
     - [Event Handlers and Side Effects](#event-handlers-and-side-effects)
   - [Managing Side Effects: useEffect Hook](#managing-side-effects-useeffect-hook)
   - [Key Takeaways](#key-takeaways)
+- [**Section 5:** React Hooks](#section-5-react-hooks)
+  - [What are Hooks?](#what-are-hooks)
+  - [Basic Hooks](#basic-hooks)
+    - [Rules of Hooks](#rules-of-hooks)
+    - [Why Call Hooks in the Same Order? (Order Matters)](#why-call-hooks-in-the-same-order-order-matters)
+  - [Custom Hooks](#custom-hooks)
+  - [More Advanced Hooks](#more-advanced-hooks)
+  - [Key Takeaways](#key-takeaways)
 
 ---
 
