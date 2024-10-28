@@ -32,6 +32,10 @@ I am currently following **Jonas Schmedtmann's** course on React.js and have dec
   - [Custom Hooks](#custom-hooks)
   - [More Advanced Hooks](#more-advanced-hooks)
   - [Key Takeaways](#key-takeaways)
+- [**Section 6:** Advanced State Management](#section-6-advanced-state-management)
+  - [Understanding State Accessibility: Local vs. Global State](#understanding-state-accessibility-local-vs-global-state)
+  - [Understanding State Domain: UI State vs. Remote State](#understanding-state-domain-ui-state-vs-remote-state)
+  - [Placing State: Where Should State Live?](#placing-state-where-should-state-live)
 
 ---
 
