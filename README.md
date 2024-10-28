@@ -698,3 +698,53 @@ useEffect(() => {
 - Hooks must follow the rules (called at the top level, in the same order).
 - Start with `useState` and `useEffect` to manage local state and side effects.
 - Custom hooks provide a way to reuse logic across components
+
+## Section 6: Advanced State Management
+
+In this section, we will dive into the world of **state management** in React applications, specifically looking at how we can categorize, locate, and manage different types of state.
+
+### Understanding State Accessibility: Local vs. Global State
+
+Think of "state" like personal information you store for each part of an app. In a social setting, local state is like personal notes you take that only you need to see. It’s kept within a single React component or a small group of related components, and no one else in the app needs access to it.
+
+In contrast, global state is like a shared announcement board everyone reads. Global state can be accessed by multiple parts of the app and is stored in a way that everyone who needs it can see it. Deciding whether state should be local or global depends on whether it should be accessible by other parts of the app.
+
+> **Quick Tip:** If you wonder whether a piece of state should be local or global, imagine if you rendered the component twice: should a change in one copy affect the other? If yes, it’s likely global state. If no, it’s probably local.
+
+### Understanding State Domain: UI State vs. Remote State
+
+Now, let’s separate state by its domain—essentially, where the data comes from.
+
+- **UI State**: This is state related to the user interface (UI). Think of UI state as settings and preferences within the app that make it look or feel a certain way, like dark mode, open panels, form inputs, etc. This state is often straightforward and typically stored directly in the app.
+
+- **Remote State**: This is data fetched from a remote server, often through an API. It’s like information retrieved from a library database—often complex, and may require revalidation or frequent updates. Managing remote state well often involves handling it asynchronously and caching it for efficiency.
+
+Because remote state can be complex, tools like React Query and SWR offer specialized features like caching and automatic re-fetching to handle this efficiently.
+
+### Placing State: Where Should State Live?
+
+When deciding where to place state in the app code, you have several options:
+
+1. Within a Local Component: For simple, isolated states that don’t need to be accessed by other parts of the app, keep them in the component they belong to, using hooks like useState or useReducer.
+
+2. Lifted to a Parent Component: If several components need to share a piece of state, you can move (or “lift”) the state up to a parent component that all those components have access to.
+
+3. Using the Context API for Global State: When state needs to be shared globally across various parts of the app, the Context API provides a way to make state accessible throughout the component tree. However, Context API isn’t really managing the state; it’s simply making it accessible. The actual management still happens via useState or useReducer.
+
+4. Using Third-Party Libraries: For larger applications or complex state needs, third-party libraries like Redux, Zustand, React Query, or SWR can manage global state more efficiently. Each has a unique focus: Redux, for instance, is versatile for managing UI and remote state, while React Query and SWR specialize in remote state.
+
+5. Using the URL for Global State: Sometimes, it’s convenient to store global state in the URL, making it easily shareable and bookmarkable across pages.
+
+6. Using Browser Storage: For persistent data that doesn’t trigger UI changes, like user preferences, local storage or session storage in the browser is an option. This is like storing information on your computer’s hard drive—it stays even if you refresh the page.
+
+### Choosing the Right Tool for Each Type of State
+
+We can now combine state classifications (local/global, UI/remote) to decide the best management tool:
+
+- Local UI State: For small or temporary states that don’t need to be shared, use useState or useReducer.
+
+- Local Remote State: Use useEffect to fetch data for smaller apps directly within the component. For example, a simple fetch request can pull data from an API, and useState or useReducer can store it.
+
+- Global Remote State: In larger applications, remote state often benefits from tools like React Query or SWR. These tools efficiently handle tasks like caching, refreshing, and synchronizing data with the server.
+
+- Global UI State: When UI settings or preferences need to be shared globally, the Context API with useState or useReducer is a good choice. For more performance-heavy needs, libraries like Redux can add extra features.
